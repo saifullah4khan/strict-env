@@ -45,9 +45,9 @@ class EnvError(Exception):
 class Config:
     """The result of a successful :func:`load`.
 
-    Values are reachable by attribute (``cfg.PORT``) or by item
-    (``cfg[\"PORT\"]``). It is intentionally read-only; treat it as settled
-    configuration, not a mutable bag.
+    Values are reachable by attribute (cfg.PORT) or by item (cfg['PORT']). It is
+    intentionally read-only; treat it as settled configuration, not a mutable
+    bag.
     """
 
     def __init__(self, values: Mapping[str, Any]):
@@ -91,16 +91,16 @@ def field(
     You can write the dict by hand; this helper just gives editors something to
     autocomplete and keeps call sites readable.
 
-    ``type``      one of ``str``, ``int``, ``float``, ``bool``, ``list``, or any
-                  callable that takes the raw string and returns the parsed value
-                  (raise ``ValueError`` inside it to signal an invalid value).
-    ``default``   supplying it makes the variable optional.
-    ``required``  force required/optional explicitly; defaults to \"required
-                  unless a default was given\".
-    ``secret``    keep the value out of error messages (for tokens, passwords).
-    ``choices``   restrict the parsed value to a fixed set.
-    ``validate``  extra predicate run after parsing; return False to reject.
-    ``item_type`` element type when ``type`` is ``list``.
+    type       one of str, int, float, bool, list, or any callable that takes
+               the raw string and returns the parsed value (raise ValueError
+               inside it to signal an invalid value).
+    default    supplying it makes the variable optional.
+    required   force required/optional explicitly; defaults to required unless a
+               default was given.
+    secret     keep the value out of error messages (for tokens, passwords).
+    choices    restrict the parsed value to a fixed set.
+    validate   extra predicate run after parsing; return False to reject.
+    item_type  element type when type is list.
     """
     spec: dict = {"type": type, "secret": secret, "item_type": item_type}
     if default is not _MISSING:
@@ -155,15 +155,15 @@ def _parse(spec: dict, raw: str) -> Any:
 
 
 def load(schema: Mapping[str, dict], environ: Optional[Mapping[str, str]] = None) -> Config:
-    """Load and validate configuration against ``schema``.
+    """Load and validate configuration against schema.
 
-    ``schema`` maps a variable name to a spec dict (see :func:`field`). Pass a
-    mapping as ``environ`` to load from something other than ``os.environ`` --
-    this is what makes the whole thing trivially testable.
+    schema maps a variable name to a spec dict (see field). Pass a mapping as
+    environ to load from something other than os.environ; this is what makes the
+    whole thing trivially testable.
 
-    Returns a :class:`Config` on success. Raises :class:`EnvError` listing every
-    problem if anything is missing or malformed. Raises :class:`ValueError` for a
-    malformed schema, since that is a programming error, not a config error.
+    Returns a Config on success. Raises EnvError listing every problem if
+    anything is missing or malformed. Raises ValueError for a malformed schema,
+    since that is a programming error, not a config error.
     """
     src = os.environ if environ is None else environ
     values: dict = {}
